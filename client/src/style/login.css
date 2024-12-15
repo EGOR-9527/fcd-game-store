@@ -1,0 +1,273 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #080c16; /* Темный фон */
+  transition: 0.5s;
+  font-family: "Arial", sans-serif; /* Шрифт */
+}
+
+.shadow_left.active,
+.shadow_right.active {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 270px;
+  filter: blur(200px);
+  transition: 0.5s;
+}
+
+.shadow_left.active {
+  left: 0;
+  box-shadow: inset 200px 40px 100px rgba(194, 32, 194, 0.5); /* Подсветка */
+}
+
+.shadow_right.active {
+  right: 0;
+  box-shadow: inset 200px 40px 100px rgba(25, 165, 21, 0.5); /* Подсветка */
+}
+
+.container {
+  width: 800px;
+  height: 500px;
+  padding: 40px;
+  position: relative;
+  background-color: #1e1e2f; /* Темный фон для контейнера */
+  border-radius: 15px; /* Увеличено скругление */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Более мягкая тень */
+  overflow: hidden; /* Скрыть переполнение */
+}
+
+.block {
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.block-item {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.block-item__title {
+  font-size: 1.8rem; /* Увеличен размер шрифта */
+  font-weight: 600; /* Увеличена жирность */
+  color: #eaeaea; /* Светлый цвет текста */
+  margin-bottom: 20px;
+}
+
+.login {
+  background-color: #6a0dad; /* Фиолетовый цвет */
+}
+
+.registr {
+  background-color: #28a745;
+}
+
+.block-item__btn {
+  border: none;
+  cursor: pointer;
+  padding: 12px 24px; /* Увеличены отступы */
+  color: #fff;
+  font-size: 18px; /* Увеличен размер шрифта */
+  font-weight: 500;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.2s; /* Добавлен эффект трансформации */
+}
+
+.block-item__btn:hover {
+  transform: translateY(-2px); /* Эффект поднятия кнопки */
+}
+
+.form-box {
+  background-color: #252538; /* Темный фон для формы */
+  height: 100%;
+  width: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Центрируем содержимое */
+  overflow: hidden;
+  transition: 0.5s ease-in-out;
+}
+
+.form-box.active {
+  left: 50%;
+}
+
+.form {
+  width: 100%;
+  padding: 30px; /* Увеличены отступы */
+  font-size: 16px;
+  position: relative; /* Изменено на relative */
+}
+
+.form__title {
+  font-size: 1.8rem; /* Увеличен размер шрифта */
+  display: flex;
+  justify-content: center;
+  font-weight: 600; /* Увеличена жирность */
+  color: #eaeaea; /* Светлый цвет текста */
+  margin-bottom: 20px; /* Добавлено для отступа */
+}
+
+.form__input {
+  width: 100%;
+  border: solid 1px #444; /* Темная граница */
+  padding: 12px; /* Увеличены отступы */
+  font-size: inherit;
+  margin-bottom: 15px; /* Добавлено для отступа между полями */
+  border-radius: 5px; /* Добавлено для скругления углов */
+  background-color: #2a2a3d; /* Темный фон для полей ввода */
+  color: #eaeaea; /* Светлый цвет текста */
+  transition: border-color 0.3s; /* Плавный переход цвета границы */
+}
+
+.form__input:focus {
+  border-color: #6a0dad; /* Цвет границы при фокусе */
+}
+
+.form__btn {
+  border: none;
+  cursor: pointer;
+  font-size: inherit;
+  background-color: #6a0dad; /* Фиолетовый цвет */
+  color: #fff;
+  padding: 12px 24px; /* Увеличены отступы */
+  border-radius: 5px; /* Добавлено для скругления углов */
+  transition: background-color 0.3s, transform 0.2s; /* Добавлен эффект трансформации */
+}
+
+.form__btn:hover {
+  transform: translateY(-2px); /* Эффект поднятия кнопки */
+}
+
+.form__forgot {
+  color: #eaeaea; /* Светлый цвет текста */
+  margin-top: 10px; /* Добавлено для отступа */
+  text-decoration: underline; /* Подчеркнутый текст */
+}
+
+.form__btn_signup {
+  background-color: #28a745; /* Зеленый цвет для кнопки регистрации */
+}
+
+.form-box.active .form_signin {
+  left: -100%;
+  transition-delay: 0s;
+}
+
+.form-box.active .form_signup {
+  left: 0;
+  transition-delay: 0.25s;
+}
+
+.form_signin {
+  left: 0;
+  transition-delay: 0.25s;
+}
+
+.form_signup {
+  left: 100%;
+  transition-delay: 0s;
+}
+
+.responseLogin.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6a0dad;
+  text-shadow: 0px 0px 15px #6a0dad;
+  margin-bottom: 2vw;
+  transition: 0.5s;
+  opacity: 1;
+}
+
+.responseLogin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6a0dad;
+  transition: 0.5s;
+  opacity: 0;
+}
+
+.responseRegistr.active {
+  opacity: 1;
+  transform: translateY(0); /* Позиция при активации */
+  text-shadow: 0 2px 15px #28a745;
+  visibility: visible; /* Убедитесь, что элемент видим */
+}
+
+.responseRegistr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #28a745;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; /* Добавлено transform */
+  opacity: 0;
+  transform: translateY(20px); /* Начальная позиция ниже */
+  visibility: hidden; /* Элемент скрыт по умолчанию */
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a72828;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; /* Добавлено transform */
+  opacity: 0;
+  transform: translateY(20px); /* Начальная позиция ниже */
+  visibility: hidden; /* Элемент скрыт по умолчанию */
+}
+
+.error-message.active {
+  opacity: 1;
+  text-shadow: 0 2px 15px #a72828;
+  transform: translateY(0); /* Позиция при активации */
+  visibility: visible; /* Убедитесь, что элемент видим */
+}
+
+@media (max-width: 992px) {
+  .container {
+    max-width: 400px;
+    height: auto; /* Изменено на auto для адаптивности */
+    padding: 20px;
+    margin: 0 20px;
+  }
+
+  .block {
+    flex-direction: column; /* Изменено на колонку для мобильных устройств */
+  }
+
+  .block-item {
+    width: 100%;
+    padding: 20px 0; /* Добавлено для отступа */
+    text-align: center; /* Центрируем текст */
+  }
+
+  .form-box {
+    width: 100%;
+    height: auto; /* Изменено на auto для адаптивности */
+    box-shadow: none;
+    top: 0;
+  }
+
+  .form-box.active {
+    top: 150px;
+    left: 0;
+  }
+}
