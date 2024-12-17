@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { observer } from "mobx-react-lite";
-import { loginUser } from "../../entities/loginUser.tsx"; // Убедитесь, что этот тип правильно определен
-import { api } from "../../shared/api.ts"; // Измените на правильный импорт вашего API
+import { loginUser } from "../../entities/loginUser.tsx";
+import { useNavigate } from 'react-router-dom';
+import { api } from "../../shared/api.ts"
+import { pathKeys } from "../../shared/lib/react-router.ts"
 import "../../style/login.css";
 
 export const Login: React.FC = observer(() => {
@@ -9,6 +11,7 @@ export const Login: React.FC = observer(() => {
     const [dataUser, setDataUser] = useState<loginUser>({ email: '', password: '' });
     const [registerData, setRegisterData] = useState<loginUser>({ email: '', password: '', nick: '' });
     const [positiveResponse, setPositiveResponse] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     const handleLoginClick = () => {
         setIsLogin(true);
@@ -30,6 +33,7 @@ export const Login: React.FC = observer(() => {
         await api.login(dataUser.email, dataUser.password);
         if (!api.error) {
             setPositiveResponse("Вход успешен!");
+            navigate(pathKeys.home());
         }
     }
 
@@ -38,6 +42,7 @@ export const Login: React.FC = observer(() => {
         await api.register(registerData.email, registerData.password, registerData.nick);
         if (!api.error) {
             setPositiveResponse("Регистрация успешна!");
+            navigate(pathKeys.home());
         }
     }
 
@@ -103,9 +108,6 @@ export const Login: React.FC = observer(() => {
                             </p>
                             <p>
                                 <button type="submit" className="form__btn">Войти</button>
-                            </p>
-                            <p>
-                                <a className="form__forgot">Восстановить пароль</a>
                             </p>
                         </form>
                     ) : (

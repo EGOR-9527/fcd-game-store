@@ -1,17 +1,20 @@
 import { createBrowserRouter, RouterProvider, redirect } from 'react-router-dom';
-import { lazy } from 'react';
-import { pathKeys } from '../shared/lib/react-router.ts';
 import { PageLogin } from "../pages/ui/PageLogin.tsx";
+import { PageHome } from "../pages/ui/PageHome.tsx";
+import { pathKeys } from '../shared/lib/react-router.ts'; // Убедитесь, что путь правильный
 
 const routes = [
     {
-        path: '/', // Корневой путь
+        path: '/',
         loader: () => redirect(pathKeys.login()), // Перенаправление на страницу входа
     },
     {
-        children: [
-            { path: pathKeys.login(), element: <PageLogin /> }
-        ]
+        path: pathKeys.login(), // Путь для страницы входа
+        element: <PageLogin />,
+    },
+    {
+        path: pathKeys.home(), // Путь для домашней страницы
+        element: <PageHome />,
     }
 ];
 

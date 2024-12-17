@@ -1,0 +1,64 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.Slider {
+  display: flex;
+}
+
+.blockImg {
+  position: relative;
+  background-color: #101729;
+  width: 17vw;
+  height: 6vw;
+  margin-block-end: 0.5vw;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 1vw; /* Радиус закругления */
+  overflow: hidden; /* Скрываем все, что выходит за пределы блока */
+}
+
+.blockImg > h1 {
+  margin-left: 1vw;
+  color: white;
+}
+
+.bigImgGame {
+  margin-inline-end: 1vw;
+}
+
+.blockImg > img {
+  border-radius: 8px;
+  z-index: 1;
+  display: block;
+  height: 4vw;
+  max-width: none;
+  margin-left: 1vw;
+  width: 4vw;
+}
+
+.blockImg > h1 {
+  z-index: 1;
+}
+
+.bigImgGame > img {
+  border-radius: 8px;
+  display: block;
+  height: 32vw;
+  max-width: none;
+  width: 50vw;
+}
+
+.loading {
+  position: absolute;
+  background-color: #243150;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100%; /* Задаем высоту 100% от родителя */
+  border-radius: 1vw; /* Добавляем радиус закругления */
+  transition: width 0.05s; /* Плавный переход для ширины */
+}
