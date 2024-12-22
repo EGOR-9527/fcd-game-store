@@ -1,29 +1,56 @@
 const { Router } = require("express");
 const AuthUserController = require("../Controller/auth/authUserController");
 const AuthVendorController = require("../Controller/auth/authVendorController");
-const { body } = require('express-validator');
+const vendorCotroller = require("../Controller/vendor/vendorCotroller");
+const { body } = require("express-validator");
+const upload = require('multer')({ dest: './uploads' });
 const router = new Router();
 
-// User router
-router.post("/loginUser", AuthUserController.login);
+// User routes
 router.post(
-  "/registrationUser",
+  "/user/login",
   body("email").isEmail(),
   body("password").isLength({ min: 3, max: 32 }),
+  AuthUserController.login
+);
+
+router.post(
+  "/user/registration",
+  body("email").isEmail(),
+  body("password").isLength({ min: 3, max: 32 }),
+  body("nick").isString().notEmpty(), // Nick is required for users
   AuthUserController.registration
-); // Corrected spelling
+);
 
-router.get('/userRefresh', AuthUserController.refresh);
+router.get("/user/refresh", AuthUserController.refresh);
 
-// Vendor router
-router.post("/loginVendor", AuthVendorController.login);
+// Vendor routes
 router.post(
-  "/registrationVendor",
+  "/vendor/login",
   body("email").isEmail(),
   body("password").isLength({ min: 3, max: 32 }),
-  AuthVendorController.registration
-); // Corrected spelling
+  AuthVendorController.login
+);
 
-router.get('/vendorRefresh', AuthVendorController.refresh);
+router.post(
+  "/vendor/registration",
+  body("email").isEmail(),
+  body("password").isLength({ min: 3, max: 32 }),
+  body("nameCompany").isString().notEmpty(), // Name of the company is required for vendors
+  AuthVendorController.registration
+);
+
+router.post(
+  "/vendor/addProduct",
+  upload.single("img"),
+  vendorCotroller.addProduct
+);
+
+router.get(
+ "/vendor/products/:id",
+  vendorCotroller.allProducts
+);
+
+router.get("/vendor/refresh", AuthVendorController.refresh);
 
 module.exports = router;

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { observer } from "mobx-react-lite";
 import { loginUser } from "../../entities/loginUser.tsx";
 import { useNavigate } from 'react-router-dom';
-import { api } from "../../shared/api.ts"
-import { pathKeys } from "../../shared/lib/react-router.ts"
+import { api } from "../../shared/api.ts";
+import { pathKeys } from "../../shared/lib/react-router.ts";
 import "../../style/login.css";
 
 export const Login: React.FC = observer(() => {
@@ -30,7 +30,7 @@ export const Login: React.FC = observer(() => {
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        await api.login(dataUser.email, dataUser.password);
+        await api.login(dataUser.email, dataUser.password, 'user'); // Pass userType
         if (!api.error) {
             setPositiveResponse("Вход успешен!");
             navigate(pathKeys.home());
@@ -39,7 +39,7 @@ export const Login: React.FC = observer(() => {
 
     const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        await api.register(registerData.email, registerData.password, registerData.nick);
+        await api.register(registerData.email, registerData.password, 'user', registerData.nick); // Pass userType and nick
         if (!api.error) {
             setPositiveResponse("Регистрация успешна!");
             navigate(pathKeys.home());
@@ -73,7 +73,6 @@ export const Login: React.FC = observer(() => {
             <div className={`error-message ${api.error && api.error.message ? "active" : ""}`}>
                 <h1>{api.error ? api.error.message : ""}</h1>
             </div>
-
 
             <article className="container">
                 <div className="block">
@@ -128,8 +127,8 @@ export const Login: React.FC = observer(() => {
                         </form>
                     )}
                 </div>
-            </article>
+            </article >
             <div className={`shadow_right ${isLogin ? "" : "active"}`}></div>
-        </div>
+        </div >
     );
 });

@@ -3,6 +3,7 @@ const { UserBase, TokenUserModel } = require("../../model/model");
 const TokenService = require("../token/tokenUserService");
 const bcrypt = require("bcrypt");
 const ApiError = require("../../exceptions/api-error");
+const uuid = require("uuid");
 
 class AuthUserService {
   async registration(email, password, nick) {
@@ -15,7 +16,10 @@ class AuthUserService {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
+    const vendorId = uuid.v4();
+
     const newUser = await UserBase.create({
+      id: vendorId,
       nick,
       email,
       password: hashPassword,
@@ -34,7 +38,7 @@ class AuthUserService {
 
   async login(email, password) {
     const user = await UserBase.findOne({ where: { email: email } });
-    console.log(user);
+    console.log(email, password);
     if (!user) {
       throw ApiError.BadRequest("Пользователь не найден");
     }
@@ -44,7 +48,9 @@ class AuthUserService {
       throw ApiError.BadRequest("Неверный пароль");
     }
 
-    const tokenData = await TokenUserModel.findOne({where: {userId: user.id}});
+    const tokenData = await TokenUserModel.findOne({
+      where: { userId: user.id },
+    });
 
     if (!tokenData) {
       throw ApiError.BadRequest("Токен не найден для данного пользователя");
@@ -60,27 +66,27 @@ class AuthUserService {
 
   async refresh(refreshToken) {
     if (!refreshToken) {
-        throw ApiError.UnauthorizedError();
+      throw ApiError.UnauthorizedError();
     }
     const validate = TokenService.validateRefreshToken(refreshToken);
     const tokenFromDb = await TokenService.findToken(refreshToken);
     if (!validate || !tokenFromDb) {
-        throw ApiError.UnauthorizedError();
+      throw ApiError.UnauthorizedError();
     }
     const ID = await TokenUserModel.findOne({
-        where: { token: refreshToken },
+      where: { token: refreshToken },
     });
     const userData = await UserBase.findOne({ where: { id: ID.userId } });
     const tokens = TokenService.generateTokens({
-        userId: userData.id,
-        email: userData.email,
+      userId: userData.id,
+      email: userData.email,
     });
     await TokenService.saveToken(userData.id, tokens.refreshToken);
     return {
-        ...tokens,
-        user: userData,
+      ...tokens,
+      user: userData,
     };
-}
+  }
 }
 
 module.exports = new AuthUserService();

@@ -27,14 +27,13 @@ const UserBase = sequelize.define("Users", {
 });
 
 // Продавец
-// Продавец
 const Vendor = sequelize.define("Vendor", {
-  id: {
-    type: DataTypes.UUID, // Изменено на UUID
-    defaultValue: DataTypes.UUIDV4, // Добавлено значение по умолчанию
+  userId: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
-  name: {
+  nameCompany: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -55,20 +54,24 @@ const Vendor = sequelize.define("Vendor", {
 // Продукт
 const Product = sequelize.define("Product", {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
-    autoIncrement: true,
   },
   name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
   price: {
-    type: DataTypes.FLOAT,
+    type: DataTypes.FLOAT, // Убедитесь, что это FLOAT или DECIMAL
     allowNull: false,
   },
   description: {
     type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  keygame: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
   img: {
@@ -76,11 +79,11 @@ const Product = sequelize.define("Product", {
     allowNull: false,
   },
   vendorId: {
-    type: DataTypes.UUID, // Изменено на UUID
-    references: {
-      model: Vendor,
-      key: "id",
-    },
+    type: DataTypes.UUID,
+  },
+  category: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
 });
 
@@ -88,17 +91,9 @@ const Product = sequelize.define("Product", {
 const Basket = sequelize.define("Basket", {
   userId: {
     type: DataTypes.UUID,
-    references: {
-      model: UserBase,
-      key: "id",
-    },
   },
   productId: {
     type: DataTypes.INTEGER,
-    references: {
-      model: Product,
-      key: "id",
-    },
   },
   quantity: {
     type: DataTypes.INTEGER,
@@ -109,16 +104,16 @@ const Basket = sequelize.define("Basket", {
 // Все продукты продавца
 const AllProductsVendor = sequelize.define("AllProducts", {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
-    autoIncrement: true,
   },
   productId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Product,
-      key: "id",
-    },
+    type: DataTypes.UUID,
+  },
+  vendorId: {
+    // Убедитесь, что это поле существует
+    type: DataTypes.UUID,
   },
   quantity: {
     type: DataTypes.INTEGER,
@@ -130,10 +125,6 @@ const AllProductsVendor = sequelize.define("AllProducts", {
 const TokenUserModel = sequelize.define("TokenModel", {
   userId: {
     type: DataTypes.UUID,
-    references: {
-      model: UserBase,
-      key: "id",
-    },
   },
   token: {
     type: DataTypes.STRING,
@@ -144,16 +135,22 @@ const TokenUserModel = sequelize.define("TokenModel", {
 const TokenVendorModel = sequelize.define("TokenVendorModel", {
   userId: {
     type: DataTypes.UUID,
-    references: {
-      model: Vendor, // Изменено на Vendor
-      key: "id",
-    },
   },
   token: {
     type: DataTypes.STRING,
     allowNull: false,
   },
 });
+
+// Определение связей
+Vendor.hasMany(Product, { foreignKey: "vendorId" });
+Product.belongsTo(Vendor, { foreignKey: "vendorId" });
+
+UserBase.hasMany(Basket, { foreignKey: "userId" });
+Basket.belongsTo(UserBase, { foreignKey: "userId" });
+
+Product.hasMany(Basket, { foreignKey: "productId" });
+Basket.belongsTo(Product, { foreignKey: "productId" });
 
 // Экспорт моделей
 module.exports = {

@@ -1,14 +1,13 @@
-const { UserBase, Vendor, TokenVendorModel } = require("../../model/model"); // Добавлен импорт TokenVendorModel
+const { UserBase, Vendor, TokenVendorModel } = require("../../model/model");
 const bcrypt = require("bcrypt");
 const TokenService = require("../token/tokenVendorService");
-const uuid = require("uuid");
+const { v4: uuid } = require("uuid"); // Убедитесь, что вы импортируете uuid правильно
 const ApiError = require("../../exceptions/api-error");
 
 class AuthVendorService {
-  async registration(email, password, name) {
-    // Изменено на name вместо nick
+  async registration(email, password, nameCompany) {
     try {
-      const existingVendor = await Vendor.findOne({ where: { email } }); // Проверка на существующего продавца
+      const existingVendor = await Vendor.findOne({ where: { email } });
 
       if (existingVendor) {
         throw ApiError.BadRequest(
@@ -17,27 +16,30 @@ class AuthVendorService {
       }
 
       const hashPassword = await bcrypt.hash(password, 10);
-      const vendorId = uuid.v4();
+      const vendorId = uuid();
 
       const newVendor = await Vendor.create({
-        id: vendorId,
-        name,
+        userId: vendorId,
+        nameCompany,
         email,
         password: hashPassword,
       });
 
       const tokens = await TokenService.generateTokens({
-        userId: newVendor.id,
+        userId: newVendor.userId,
         email,
       });
 
       return {
         vendor: {
-          id: newVendor.id,
+          userId: newVendor.userId,
           email: newVendor.email,
-          name: newVendor.name,
+          nameCompany: newVendor.nameCompany,
+          id: newVendor.id,
         },
         tokens,
+        createdAt: newVendor.createdAt,
+        updatedAt: newVendor.updatedAt,
       };
     } catch (e) {
       throw new Error("Ошибка: " + e.message);
@@ -46,23 +48,34 @@ class AuthVendorService {
 
   async login(email, password) {
     try {
-      const vendor = await Vendor.findOne({ where: { email } }); // Изменено на findOne
-
+      const vendor = await Vendor.findOne({ where: { email } });
       if (!vendor) {
         throw ApiError.BadRequest("Продавец с таким email не был найден");
       }
 
       const isMatch = await bcrypt.compare(password, vendor.password);
-
       if (!isMatch) {
         throw ApiError.BadRequest("Неверный пароль");
       }
 
-      const refreshToken = await TokenService.findOne({
-        where: { userId: vendor.id },
+      const tokens = await TokenService.generateTokens({
+        userId: vendor.userId,
+        email,
       });
-      await TokenService.saveToken(vendor.id, refreshToken.token);
-      return { vendor, refreshToken };
+
+      await TokenService.saveToken(vendor.userId, tokens.refreshToken);
+
+      return {
+        vendor: {
+          userId: vendor.userId,
+          email: vendor.email,
+          nameCompany: vendor.nameCompany,
+          id: vendor.id,
+        },
+        tokens,
+        createdAt: vendor.createdAt,
+        updatedAt: vendor.updatedAt,
+      };
     } catch (e) {
       console.error("Ошибка: " + e.message);
       throw e;
@@ -81,12 +94,12 @@ class AuthVendorService {
     const ID = await TokenVendorModel.findOne({
       where: { token: refreshToken },
     });
-    const vendorData = await Vendor.findOne({ where: { id: ID.userId } });
+    const vendorData = await Vendor.findOne({ where: { userId: ID.userId } });
     const tokens = TokenService.generateTokens({
-      userId: vendorData.id,
+      userId: vendorData.userId,
       email: vendorData.email,
     });
-    await TokenService.saveToken(vendorData.id, tokens.refreshToken);
+    await TokenService.saveToken(vendorData.userId, tokens.refreshToken);
     return {
       ...tokens,
       vendor: vendorData,

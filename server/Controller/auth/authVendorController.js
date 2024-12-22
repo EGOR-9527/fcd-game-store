@@ -5,11 +5,19 @@ const authService = require("../../Service/auth/authVendorService");
 class AuthVendorController {
   async registration(req, res, next) {
     try {
-      const { email, password, nick } = req.body;
-      console.log(email, password, nick);
+      const { email, password, nameCompany } = req.body; // Include nameCompany
+      console.log(email, password, nameCompany);
 
-      const userData = await authService.registration(email, password, nick);
+      const userData = await authService.registration(
+        email,
+        password,
+        nameCompany
+      );
       console.log("userData: ", userData);
+      res.cookie("refreshToken", userData.refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
       return res.json(userData);
     } catch (e) {
       console.error(e);
@@ -30,7 +38,12 @@ class AuthVendorController {
       const { email, password } = req.body;
 
       const userData = await authService.login(email, password);
+      console.log("userData.tokens: " + userData.tokens);
       console.log("userData: ", userData);
+      res.cookie("refreshToken", userData.refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
       return res.json(userData);
     } catch (e) {
       console.error(e);

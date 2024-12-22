@@ -1,7 +1,8 @@
 class ApiError extends Error {
   constructor(status, message) {
     super(message);
-    this.status = status;
+    this.status = status; // Добавляем статус
+    this.name = this.constructor.name; // Устанавливаем имя ошибки
   }
 
   static UnauthorizedError() {
@@ -16,8 +17,8 @@ class ApiError extends Error {
     return new ApiError(403, "У вас нет доступа");
   }
 
-  static NotFoundError() {
-    return new ApiError(404, "Ресурс не найден");
+  static NotFoundError(message) {
+    return new ApiError(404, message);
   }
 
   static InternalServerError(message) {

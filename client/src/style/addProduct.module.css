@@ -1,0 +1,133 @@
+.addProduct {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #1c083b; /* Цвет фона */
+  z-index: 10;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.title {
+  color: white;
+  margin-bottom: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px; /* Максимальная ширина формы */
+}
+
+.formGroup {
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.label {
+  color: white;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.input[type="file"] {
+  border: none; /* Убираем границу для поля загрузки файла */
+}
+
+.textarea {
+  resize: vertical; /* Позволяем изменять размер только по вертикали */
+}
+
+.submitButton {
+  padding: 10px;
+  background-color: #4b4dcf; /* Цвет кнопки */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submitButton:hover {
+  background-color: #6b6dec; /* Цвет кнопки при наведении */
+}
+
+.closeButton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 1vw;
+  background-color: red; /* Цвет кнопки */
+  color: white; /* Цвет текста */
+  border: none; /* Убираем границу */
+  border-radius: 5px; /* Закругленные углы */
+  padding: 10px; /* Отступы */
+  cursor: pointer; /* Указатель при наведении */
+  margin-bottom: 10px; /* Отступ снизу */
+}
+
+.closeButton:hover {
+  background-color: darkred; /* Цвет кнопки при наведении */
+}
+
+/* Стили для выпадающей кнопки */
+.dropdown {
+  position: relative; /* Для позиционирования выпадающего меню */
+}
+
+.dropdownButton {
+  width: 100%;
+  padding: 10px;
+  background-color: #4b4dcf; /* Цвет кнопки */
+  color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: left; /* Выравнивание текста влево */
+  transition: background-color 0.3s;
+}
+
+.dropdownButton:hover {
+  background-color: #6b6dec; /* Цвет кнопки при наведении */
+}
+
+/* Стили для выпадающего меню */
+.dropdownMenu {
+  position: absolute;
+  top: 100%; /* Позиционируем под кнопкой */
+  left: 0;
+  width: 100%;
+  background-color: #6b6dec; /* Цвет фона меню */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  z-index: 20; /* Чтобы меню было выше других элементов */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Стили для элементов выпадающего меню */
+.dropdownItem {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dropdownItem:hover {
+  background-color: #4a4cc9; /* Цвет элемента при наведении */
+}

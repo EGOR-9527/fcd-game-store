@@ -30,11 +30,10 @@ app.use((req, res, next) => {
 
 // Обработчик ошибок
 app.use((err, req, res, next) => {
-  console.error(err); // Логирование ошибки
   if (err instanceof ApiError) {
     return res.status(err.status).json({ message: err.message });
   }
-  return res.status(500).json({ message: "Ошибка сервера" });
+  return res.status(500).json({ message: "Что-то пошло не так" });
 });
 
 // Запуск сервера
