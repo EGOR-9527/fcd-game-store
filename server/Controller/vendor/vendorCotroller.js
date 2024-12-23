@@ -1,6 +1,5 @@
 const ApiError = require("../../exceptions/api-error");
 const vendorService = require("../../Service/vendor/vendorService");
-const fs = require("fs");
 const path = require("path");
 
 class VendorController {
@@ -10,18 +9,15 @@ class VendorController {
       console.log("id", id);
       const products = await vendorService.allProducts(id);
       console.log("products", products);
-
       // Формируем массив с относительными путями к изображениям
       const productsWithImages = products.map((product) => {
-        const imgPath = path.join("../../uploads", path.basename(product.img)); // Используйте basename для получения имени файла
-        console.log("imgPath: " + imgPath);
+        const imgPath = path.basename(product.img); // Получаем только имя файла
         return {
           ...product,
-          img: imgPath, // Возвращаем относительный путь
+          img: imgPath, // Возвращаем только имя файла
         };
       });
-      console.log(productsWithImages);
-      res.json(productsWithImages); // Отправляем ответ с продуктами
+      res.json(productsWithImages);
     } catch (e) {
       console.error(e);
       return next(ApiError.InternalServerError(e.message));
@@ -30,8 +26,7 @@ class VendorController {
 
   async addProduct(req, res, next) {
     const { vendorId, name, description, keygame, price, category } = req.body;
-    const img = req.file.buffer; // Получаем файл из req.file
-
+    const img = req.file; // Получаем файл из req.file
     if (!img) {
       return res.status(400).json({ message: "Файл не загружен" });
     }
@@ -40,7 +35,6 @@ class VendorController {
     const imgPath = img.path; // Используем путь к файлу, который уже был сохранен multer
 
     try {
-      // Здесь вы можете использовать imgPath для добавления продукта
       await vendorService.addProduct(
         vendorId,
         imgPath,
@@ -54,6 +48,23 @@ class VendorController {
     } catch (e) {
       console.error(e);
       return next(e);
+    }
+  }
+
+  async deleteProduct(req, res, next) {
+    const { id } = req.params;
+    console.log(id);
+    try {
+      const answer = await vendorService.deleteProduct(id);
+
+      if (answer) {
+        return res.status(200).json({ message: "Продукт успешно удален" });
+      } else {
+        return next(ApiError.NotFound("Продукт не найден"));
+      }
+    } catch (error) {
+      console.error(error);
+      return next(ApiError.InternalServerError("Ошибка при удалении продукта"));
     }
   }
 }

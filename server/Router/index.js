@@ -3,7 +3,19 @@ const AuthUserController = require("../Controller/auth/authUserController");
 const AuthVendorController = require("../Controller/auth/authVendorController");
 const vendorCotroller = require("../Controller/vendor/vendorCotroller");
 const { body } = require("express-validator");
-const upload = require('multer')({ dest: './uploads' });
+const multer = require("multer");
+const path = require("path"); // Импортируем модуль path из стандартной библиотеки
+
+// Настройка multer для сохранения изображений в формате JPG
+const storage = multer.diskStorage({
+  destination: "./uploads",
+  filename: (req, file, cb) => {
+    // Генерируем уникальное имя файла с расширением .jpg
+    cb(null, `${Date.now()}-${file.originalname.replace(/\.[^/.]+$/, "")}.jpg`);
+  },
+});
+
+const upload = multer({ storage: storage });
 const router = new Router();
 
 // User routes
@@ -18,7 +30,7 @@ router.post(
   "/user/registration",
   body("email").isEmail(),
   body("password").isLength({ min: 3, max: 32 }),
-  body("nick").isString().notEmpty(), // Nick is required for users
+  body("nick").isString().notEmpty(),
   AuthUserController.registration
 );
 
@@ -36,7 +48,7 @@ router.post(
   "/vendor/registration",
   body("email").isEmail(),
   body("password").isLength({ min: 3, max: 32 }),
-  body("nameCompany").isString().notEmpty(), // Name of the company is required for vendors
+  body("nameCompany").isString().notEmpty(),
   AuthVendorController.registration
 );
 
@@ -46,10 +58,9 @@ router.post(
   vendorCotroller.addProduct
 );
 
-router.get(
- "/vendor/products/:id",
-  vendorCotroller.allProducts
-);
+router.get("/vendor/products/:id", vendorCotroller.allProducts);
+
+router.delete("/vendor/deleteProduct/:id", vendorCotroller.deleteProduct);
 
 router.get("/vendor/refresh", AuthVendorController.refresh);
 

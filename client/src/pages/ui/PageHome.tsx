@@ -8,6 +8,7 @@ export const PageHome: React.FC = () => {
             <Header/>
             <Slider />
             
+            
         </div>
     );
 };

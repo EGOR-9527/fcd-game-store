@@ -93,7 +93,7 @@ const Basket = sequelize.define("Basket", {
     type: DataTypes.UUID,
   },
   productId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID, // Измените с INTEGER на UUID
   },
   quantity: {
     type: DataTypes.INTEGER,
@@ -102,7 +102,7 @@ const Basket = sequelize.define("Basket", {
 });
 
 // Все продукты продавца
-const AllProductsVendor = sequelize.define("AllProducts", {
+const AllProductsVendor = sequelize.define("AllProductsVendor", {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,

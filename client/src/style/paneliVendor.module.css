@@ -104,14 +104,21 @@
 }
 
 .gameImage {
-  width: 40px;
-  height: 40px;
+  width: 4vw;
+  height: 4vw;
   margin-right: 10px;
 }
 
 .column {
   text-align: center; /* Центрируем текст */
   padding: 5px; /* Добавляем немного отступа для лучшего восприятия */
+}
+
+.column > button {
+  width: 7vw;
+  height: 2vw;
+  border: none;
+  background-color: rgb(173, 50, 50);
 }
 
 .footer {
@@ -124,6 +131,14 @@
   justify-content: space-evenly;
   height: 4vw;
   background-color: #1c1c25;
+}
+
+.noProducts{
+  font-size: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10vw;
 }
 
 .footerButton {

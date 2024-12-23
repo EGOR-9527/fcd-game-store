@@ -33,9 +33,9 @@ class RestApi {
             
             // Сохраняем данные в нужном формате
             const userData = {
-                id: response.data.vendor.id, // Предполагается, что id возвращается от сервера
-                userId: response.data.vendor.userId, // Предполагается, что userId возвращается от сервера
-                token: response.data.tokens.refreshToken, // Предполагается, что refreshToken возвращается от сервера
+                id: response.data.id, // Предполагается, что id возвращается от сервера
+                userId: response.data.userId, // Предполагается, что userId возвращается от сервера
+                token: response.data.refreshToken, // Предполагается, что refreshToken возвращается от сервера
                 createdAt: response.data.createdAt, // Предполагается, что createdAt возвращается от сервера
                 updatedAt: response.data.updatedAt, // Предполагается, что updatedAt возвращается от сервера
             };
@@ -55,9 +55,9 @@ class RestApi {
             
             // Сохраняем данные в нужном формате
             const userData = {
-                id: response.data.vendor.id, // Предполагается, что id возвращается от сервера
-                userId: response.data.vendor.userId, // Предполагается, что userId возвращается от сервера
-                token: response.data.tokens.refreshToken, // Предполагается, что refreshToken возвращается от сервера
+                id: response.data.id, // Предполагается, что id возвращается от сервера
+                userId: response.data.userId, // Предполагается, что userId возвращается от сервера
+                token: response.data.refreshToken, // Предполагается, что refreshToken возвращается от сервера
                 createdAt: response.data.createdAt, // Предполагается, что createdAt возвращается от сервера
                 updatedAt: response.data.updatedAt, // Предполагается, что updatedAt возвращается от сервера
             };
@@ -104,6 +104,16 @@ class RestApi {
             this.clearError();
         } catch (error) {
             this.handleError(error);
+        }
+    }
+
+    async deleteProduct(productId: string) {
+        try {
+            console.log("productId: " + productId);
+            await axios.delete(`${API_URL}/vendor/deleteProduct/${productId}`, { withCredentials: true });
+            this.clearError();
+        } catch (err) {
+            this.handleError(err);
         }
     }
 
